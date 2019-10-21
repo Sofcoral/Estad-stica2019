@@ -1,0 +1,197 @@
+title: "Semana 2 - Variables y Frecuencias"
+author: "Sofía Coral"
+date: "20-10-19"
+
+#Es necesaria cargar los paquetes que serán utilizados
+> library(ape)
+> library(permute)
+> library(vegan)
+Loading required package: lattice
+This is vegan 2.5-6
+> library(ade4)
+> library(geiger)
+
+#Ejercicio 1: ¿Que clase de objeto es BIC? ¿Qué clase de objeto es geospiza? use la función *str* para obtener información sobre la estructura.
+> str(BIC)
+function (object, ...)  
+> class(BIC)
+[1] "function"
+> class(geospiza)
+[1] "list"
+> str(geospiza)
+
+#Ejercicio 2:
+¿Qué tipo de variable es tarsusL y qué clase? 
+> typeof(geospiza$geospiza.data[,2])
+> class(geospiza$geospiza.data[,2])
+
+Abra el objeto *tortues* y mire ¿Qué tipo de variables tiene y qué clase son?, haga lo mismo con el objeto *mite.env* y revise ¿Qué tipo de variable es *shurb* y qué clase es? Recuerde siempre usar help para saber de donde vienen los datos.
+
+> class(tortues)
+[1] "data.frame"
+> typeof(tortues)
+
+> class(mite.env)
+[1] "data.frame"
+> mite.env$Shrub
+> typeof(mite.env$Shrub)
+[1] "integer"
+> class(mite.env$Shrub)
+
+[1] "list"
+#Ejercicio 3: usando el data.frame *tortues* calcule la proporción de hembras y machos de la muestra
+   #M para Machos y F para hembras
+
+> M<-length(which(tortues=="M"))
+> F<-length(which(tortues=="F"))
+> F/M
+
+#Ejercicio 4: usando el data.frame *tortues* calcule la proporción entre el ancho y el largo del caparazón, genere una tabla con la información de *tortues* y la nueva variable derivada.
+
+> Ancho <- tortues$long
+> Largo <- tortues$larg
+> Ancho/Largo
+
+> Tabla_medidad <- as.data.frame(cbind(tortues$long,tortues$larg))
+>Tabla_medidad
+> colnames(Tabla_medidad) <- c('Ancho','Largo')
+> Tabla_medidad
+
+#nvd refiere a la proporción 
+
+> nvd<-Ancho/Largo
+> Tabla_medidad_nvd <-cbind.data.frame(Tabla_medidad, nvd)
+> Tabla_medidad_nvd
+
+#Ejercicio 5:¿Cuántas especies de *Corvus* fueron muestreadas en la región Paleártica-Africana?
+> freq1 <-table(corvus$phylog)
+> freq1
+
+amer orien  pale 
+6    13     9 
+#Fueron muestreadas 9 especies de Corvus para la región Paleártica-Africana
+
+
+¿Qué porcentaje de *Corvus* muestreados habitan zonas abiertas?
+  
+> freq2<-table(corvus$habitat)
+> prop.table(freq2)
+
+clos      open 
+0.3928571 0.6071429 
+
+#El 61% de Corvus habita en zonas abiertas. 
+
+#Ejercicio 6: ¿Cómo luce el gráfico de frecuencias para los tipos de hábitat del género *Corvus*?
+
+> plot(freq2, main="Frecuencias para los tipos de hábitat de Corvus", xlab= "Tipo de Hábitat", ylab= "Frecuencia", col = c("#26828EFF","#FDE725FF"))
+
+
+#Ejercicio 7: encuentre el máximo
+> xsp<- apply(atlas$birds,2,sum)
+> max(xsp)
+[1] 56
+#El máximo corresponde a 56
+
+#Ejercicio 8: **Ejer:** Repita el ejercicio para las variables continuas de tamaño de pico y tamaño del ala en el género *Corvus*. Busque cómo cambiar colores, ejes y algunas propiedades que le permitan mejorar el diseño del histograma.
+
+
+#Para el tamaño de los picos 
+
+> range(corvus$bill)
+[1] 45 85
+> Cajas <- seq(45,85,10)
+> agrupacin <- cut(corvus$bill,Cajas)
+> freq_picos<-table(agrupacin)
+> transform(freq_picos)
+> hist(corvus$bill,breaks = Cajas, main = "Longitudes de los picos de Corvus",xlab = "Longitud", ylab = "Frecuencia",col = c("#F1605DFF", "#FD9567FF","#FEC98DFF" ,"#FCFDBFFF"))
+#Para el tamaño del ala
+> min(tam_ala)
+[1] 226
+> max(tam_ala)
+[1] 473
+> range(tam_ala)
+[1] 226 473
+> Cajas2 <- seq(225.5, 485.5 , 10)
+> 
+  > datos_alas<-cut(corvus$wing,Cajas2)
+> freq_alas<-table(datos_alas)
+> transform(freq_alas)
+> hist(corvus$wing, breaks =  Cajas2, main = 'Tamaño del ala de especie de Corvus', xlab="Tamaño",ylab = "Frecuencia", col = c("#000004FF", "#180F3EFF", "#451077FF", "#721F81FF", "#9F2F7FFF" ,"#CD4071FF", "#F1605DFF", "#FD9567FF", "#FEC98DFF", "#FCFDBFFF","#440154FF", "#482878FF" ,"#3E4A89FF", "#31688EFF", "#26828EFF", "#1F9E89FF" ,"#35B779FF" ))
+
+#Invente unos datos de medidas, como se hizo en el caso de los cráneos, y genere todo el ejercicio hasta el histograma. Busque otro tipo de distribuciones para generar las variables [ejemplo][3]. 
+
+#Se procede a realizar una tabla para la realización del ejercicio
+
+> Anchodetronco<-rnorm(90,57,1)
+> Anchodetronco
+> Largodetronco<-rnorm(90,167,2)
+> Largodetronco
+
+> medidas_tronco<-cbind(Anchodetronco,Largodetronco)
+> medidas_tronco
+
+> Tabla_medidas_tronco<-as.data.frame(cbind(paste('spp',1:90,sep = '_'),medidas_tronco))
+> colnames(Tabla_medidas_tronco)<-c("Individuos","Ancho del tronco","Largo del tronco")
+> Tabla_medidas_tronco
+
+RelacionAL<- Anchodetronco/Largodetronco
+> Tabla_medidas_AL<-cbind.data.frame(Tabla_medidas_tronco,RelacionAL)
+> Tabla_medidas_AL
+> freqt<-table(Tabla_medidas_tronco$`Ancho del tronco`)
+> freqt
+> prop.table(freqt)
+
+#Se procedio a cambiar la columna de data.frame de factor a númerico 
+
+> class(Tabla_medidas_tronco$`Ancho del tronco`)
+[1] "factor"
+Tabla_medidas_tronco$`Ancho del tronco` <- as.numeric(as.character(Tabla_medidas_tronco$`Ancho del tronco`))
+> min(Tabla_medidas_tronco$`Ancho del tronco`)
+[1] 54.83826
+> max(Tabla_medidas_tronco$`Ancho del tronco`)
+[1] 60.16578
+> range(Tabla_medidas_tronco$`Ancho del tronco`)
+[1] 54.83826 60.16578
+> cajast<-seq(54.83826,60.16578,2)
+> datost<-cut(Tabla_medidas_tronco$`Ancho del tronco`,cajast)
+> freq_ancho<-table(datost)
+> transform(freq_ancho)
+> transform(freq_ancho, Relativ= prop.table(Freq), Acum= cumsum(Freq))
+
+# Por último se realizó el histograma 
+
+> hist(Tabla_medidas_tronco$"Ancho del tronco", main="Ancho del tronco de arboles", col=c("#1F968BFF","#20A386FF", "#29AF7FFF", "#3CBC75FF", "#56C667FF", "#74D055FF","#94D840FF", "#B8DE29FF", "#DCE318FF", "#FDE725FF"),xlab="Ancho en cm",ylab = "Frecuencia")
+Busque en qué casos sirve cada distribución o para qué se usan.
+
+#Distribución binomial
+A la función de probabilidad de una variable aleatoria X resultado de 
+contar el número de éxitos al repetir n veces una experiencia aleatoria dicotómica 
+con probabilidad de éxito p la llamamos distribución binomial y la representamos por
+B (n, p)
+
+#Distribución poisson
+
+En este tipo de experimentos los éxitos buscados son expresados por unidad de área, tiempo, pieza:
+  
+  - # de defectos de una tela por m2
+  
+  - # de aviones que aterrizan en un aeropuerto por día, hora, minuto, etc, etc.
+  
+  - # de bacterias por cm2 de cultivo
+  
+  - # de llamadas telefónicas a un conmutador por hora, minuto, etc, etc.
+  
+  - # de llegadas de embarcaciones a  un puerto por día, mes, etc, etc.
+  
+#Distribución hipergeométrica
+
+Es útil en aquellos casos en los que se extrae una muestra o se realizan experiencias repetidas 
+sin devolución del elemento que fue extraído, es decir que no retornó a la situación experimental inicial.
+
+#Distribución normal
+
+La distribución de una variable normal está completamente determinada por dos parámetros, su media y su desviación estándar, denotadas generalmente por alpha  y omega.
+La distribución normal  también llamada distribución gaussiana, tiene bastante importancia debido a la frecuencia con la que distintas variables asociadas a fenómenos naturales y cotidianos siguen, aproximadamente, esta distribución.  
+Caracteres morfológicos (como la talla o el peso), o psicológicos (como el cociente intelectual) son ejemplos de variables de las que frecuentemente se asume que siguen una distribución normal. 
+
