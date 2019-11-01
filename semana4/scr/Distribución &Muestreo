@@ -1,0 +1,144 @@
+title: "Seman5_Distribuiciones_&_Teorema"
+author: "Sofía Coral"
+date: "22/10/2019"
+
+#Ejercicio 1: ¿CUál es la probabilidad de que sean 3 de fenotipo blanco?
+
+# se sabe que la probabilidad de ser fenotipo blanco es de 0.25 
+
+dbinom(3,size=8,prob=0.25)
+[1] 0.2076416
+#Rta/La probabilidad de que sea de fenotipo blanco es de 21% 
+
+#Ejercicio 2: ¿Cuál es la probabilidad de encontrar 6 semillas por bloque?
+
+dpois(x=6,lambda = 10)
+[1] 0.06305546
+
+#La probabilidad de enocontrar 6 semillas es de 6.3% 
+# Grafique todos los eventos de 0 a 50
+plot(dpois(x = 0:50,lambda = 10))
+
+
+#Ejericio 3: Ejer: A partir del tortues del paquete ade4,
+calcule el promedio y la desviación estándar de las alturas 
+de caparazones de las tortugas. Haga el análisis por sexo y grafíquelo.
+
+
+library(ade4)
+data("tortues")
+View(tortues)
+head(tortues$haut)
+# Para el promedio utilizamos la función mean()
+Altura<-tortues$haut
+PromedioA<-mean(tortues$haut)
+PromedioA
+[1] 46.14583
+#Para la desviación estandar utilizamos la función sd()
+sdA<-sd(tortues$haut)
+sdA
+[1] 8.384356
+
+#Ánalisis por sexo
+
+#M = Machos
+PromedioA<-mean(tortues$haut[which(tortues$sexe=="M")])
+PromedioA
+[1] 40.75
+sdA<-sd(tortues$haut[which(tortues$sexe=="M")])
+sdA
+[1] 3.352481
+
+#Gráfica M
+
+> AlturaCaparazonM<-tortues$haut[which(tortues$sexe=="M")]
+> hist(AlturaCaparazonM)
+
+
+#F= Hembras
+
+> PromedioAF<-mean(tortues$haut[which(tortues$sexe=="F")])
+> PromedioAF
+[1] 51.54167
+> sdAF<-sd(tortues$haut[which(tortues$sexe=="F")])
+> sdAF
+[1] 8.464654
+
+#Gráfica F
+> AlturaCaparazonF<-tortues$haut[which(tortues$sexe=="F")]
+> hist(AlturaCaparazonF)
+
+
+#Ejercicio 4: 
+
+Para ver como crecen exponencialmente, empecemos con 1000 bacterias en un matraz con una cantidad ilimitada de nutrientes.
+#N
+N<-c(1000,2000,4000,8000,16000,32000)
+Dia<-(1:6)
+#La gráfica se representa de la siguiente manera 
+CEB <- plot(Dia,N, xlab="Días transcurridos",ylab="Número de Bacterias", main="Crecimiento de bacterias",col=c("#56C667FF","#74D055FF", "#94D840FF" ,"#B8DE29FF" ,"#DCE318FF", "#FDE725FF"))
+
+#Se podría realizar una predicción de la cantidad de bacterias presentes en 10 días, si su crecimiento se duplica por medio de: 
+
+#NO representa la población inicial y lambda al factor de multiplicación de bacterias por día
+
+N0<-1000
+lambda<-2
+tiempo<-0:10
+Nt<-N0*lambda^tiempo
+Nt
+
+#Ejer5 Simule 5000 peces de criadero en un tanque, todos son de la misma cohorte. Imagine que los organiza en fila y quiere seleccionar 100 para calcular estadísticos de la población. Haga un muestreo sistemático y calcule los estadísticos y descriptivos vistos anteriormente. Grafique.
+
+N<-5000
+n<-100
+
+#para realizar el muestreo sistemático se realizaron los siguientes procedimientos
+
+install.packages("devtools")
+library(devtools)
+install_github("DFJL/SamplingUtil")
+library(SamplingUtil)
+help("sys.sample")
+N<-5000
+n<-100
+Muestreosis<-sys.sample(N,n)
+Muestreosis
+
+#Realizaremos estadísticos y descriptivos
+Largopez<-abs(rnorm(Muestreosis,20,3))
+Largopez
+sexo <- c(rep("M",38),rep("F",62))
+datos <- data.frame(cbind(Muestreosis,Largopez,sexo))
+datos
+
+#Para observar el promedio del largo de los peces hembras se realiza lo siguiente: 
+Largo<-datos$Largopez[which(datos$sexo=="F")]
+
+datos$Largopez <- as.numeric(as.character(datos$Largopez))
+
+PromedioH<-mean(datos$Largopez[which(datos$sexo=="F")])
+
+#El promedio del largo de Machos es:
+
+LargoM<-datos$Largopez[which(datos$sexo=="M")]
+PromedioM<-mean(datos$Largopez[which(datos$sexo=="M")])
+PromedioM
+
+#Con esto observamos que el promedio del largo de Hembras es superior al de machos. 
+
+#Graficamos un histograma que representa la longitud de Hembras tomadas de un muestreo sistemático. 
+
+Largo <- as.numeric(as.character(Largo))
+hist(Largo, xlab="Largo (cm)",ylab = "Frecuencia",main = "Longitud del pez hembra",col = c("#56C667FF","#74D055FF", "#94D840FF" ,"#B8DE29FF" ,"#DCE318FF", "#FDE725FF","#56C667FF","#74D055FF"))
+median(Largo)
+range(Largo)
+abline(v = mean(Largo), col = "royalblue", lwd = 2)
+abline(v = median(Largo), col = "red",lwd = 2)
+lines(density(Largo), lwd = 2,col = "chocolate3")
+ 
+#Cuantil
+quantile(Largo)
+
+#Longitudes menores al 50%
+quantile(Largo,probs=0.5)
