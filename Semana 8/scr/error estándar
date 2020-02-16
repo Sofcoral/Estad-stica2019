@@ -1,0 +1,77 @@
+title: "Semana8_ES"
+author: "Sofía Coral Chamorro"
+date: "01/28/2019"
+
+#Se hace la comparación de todos los resultados con los ejericios vistos en la semanana 8*
+
+#Ejer1:  Aumente el valor de desviación estándar y evalúe cómo cambia el error estándar.
+
+Pob <- ceiling(rnorm(5000,mean = 35, sd= 4))
+
+m1<-sample(x=Pob,size = 40,replace = T)
+m2<-sample(x=Pob,size = 40,replace = T)
+m3<-sample(x=Pob,size = 40,replace = T)
+
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+
+#Rta/ al aumentar el valor de la sd, el error estándar aumenta, estos dos valores son directamente proporcionales, ya que el error estándar es la
+#desviación estándar de todas las posibles muestras de la población.
+
+#Ejer2:  Aumente el tamaño de la muestra y evalúe cómo cambia el error estándar.
+
+Pob <- ceiling(rnorm(5000,mean = 35, sd= 4))
+m1<-sample(x=Pob,size = 70,replace = T)
+m2<-sample(x=Pob,size = 70,replace = T)
+m3<-sample(x=Pob,size = 70,replace = T)
+
+
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+
+
+#Rta/ se observa que al aumentar el tamaño de la muestra, la desviación estándar disminuye casi en un 30% con respecto a la previa desviación estándar
+#con un tamaño de la muestra menor. Esto demuestra que entre más muestreos se realicen el error estándar será menor, pues se disponen de más datos.
+
+
+
+#Cambie el tamaño de muestra y evalúe el valor de error estándar. 
+#¿Cuánto debería aumentar la muestra para que el error estándar disminuya a la mitad?
+
+set.seed(800)
+
+Pob <- ceiling(rnorm(5000,mean = 35, sd= 1))
+
+
+#Muestras en lugares difernetes
+
+m1<-sample(x=Pob,size = 40,replace = T)
+m2<-sample(x=Pob,size = 40,replace = T)
+m3<-sample(x=Pob,size = 40,replace = T)
+
+#se realiza el cálculo de medidad de tendecia de cada una de las tomas por lugar
+
+#m1
+
+mean(m1)
+sd(m1)
+
+#"m2"
+
+mean(m2)
+sd(m2)
+
+
+#m3
+
+mean(m3)
+sd(m3)
+
+#Observación en cajas
+
+boxplot(cbind(m1,m2,m3))
+
+
+#Para observar el error estándar
+
+sd(c(m1,m2,m3))/sqrt(length(c(m1,m2,m3)))
+
+#Rta/ La muestra debería aumentar al menos 4 veces, para que el error disminuya a la mitad.
