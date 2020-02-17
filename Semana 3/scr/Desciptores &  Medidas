@@ -1,0 +1,346 @@
+title: "Semana3_Descriptores&Medidas"
+author: "Sofía Coral Chamorro"
+date: "October 3, 2019"
+
+
+#Cargamos los  datos requeridos
+data("iris")
+iris
+
+#realizamos el promedio de los pétalos
+
+#sumatoria de los datos
+pet.Setosa <- sum(iris$Petal.Length[which(iris$Species=='setosa')])
+pet.Setosa
+
+#cáculo del tamaño
+length(iris$Petal.Length[which(iris$Species=='setosa')])
+nsetosa <- length(iris$Petal.Length[which(iris$Species=='setosa')])
+nsetosa
+
+#media
+media <- pet.Setosa/nsetosa
+media
+
+#Graficamos la longitud del pétalo de setosa
+hist(iris$Petal.Length[which(iris$Species=='setosa')])
+
+#Ejer1. Si la columna iris$Petal.Length tuviera valores 'NA', ¿Cómo podría eliminarlos antes de hacer la estimación de la media?
+
+La función na.omit(), nos permite eliminar los valores NA
+
+#Ejer2. Estime la media aritmética de la altura, la longitud y el ancho del caparazón de las tortugas pintadas [data(tortues), paquete: ade4].
+
+#Cargamos el paquete
+library(ade4)
+data("tortues")
+tortues
+mediatortues <- c(mean(tortues$long), mean(tortues$larg), mean(tortues$haut))
+mediatortues
+
+
+#Mediana
+#Ejer3: Genere una función propia que le permita encontrar la mediana, tal y como lo hizo con la media aritmética.
+
+#Datos en variable
+setosa <- iris$Petal.Length[which(iris$Species == "setosa")]
+setosa
+#ordenar
+setosasort <- sort(setosa)
+setosasort
+
+#Función
+
+Longitudsetosa <- length(setosa)
+#Función
+mediana <- function(x) sum(setosasort[m/2], setosasort[(m/2)+1])/2
+mediana(setosa)
+
+#Moda
+
+#Ejer: Genere una función propia que le permita calcular la moda
+
+moda <- function (setosa){
+  x <- table (setosa)
+  moda1 <- x [which.max(x)]
+  return(mode) 
+}
+
+moda
+#Ejer4: Después de generar la función del cálculo de moda, grafíquela sobre el histograma.
+
+data("iris")
+iris
+length(iris$Petal.Length[which(iris$Species=='setosa')])
+setosa <- iris$Petal.Length[which(iris$Species=='setosa')]
+
+hist(setosa, #histogram
+     col = "brown", # column color
+     border = "black", 
+     prob = TRUE, # show densities instead of frequencies
+     xlim = c(0.5,2.5),
+     xlab = "Longitud de pétalo",
+     main = "Frecuencias de longitud de pétalo de setosa")
+lines(density(setosa),
+      lwd = 2, # thickness of line
+      col = "peachpuff") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar la media
+abline(v = mean(setosa),
+       col = "green",
+       lwd = 2)
+
+abline(v = median(setosa),
+       col = "royalblue",
+       lwd = 2)
+
+#Graficar la moda
+abline(v = moda(setosa),
+       col="pink",
+       lwd=2)
+
+legend(x = "topright", # location of legend within plot area
+       c("Density plot", "Media", "Mediana", "Moda"),
+       col = c("peachpuff", "green", "royalblue","pink"),
+       lwd = c(2, 2, 2, 2))
+
+#Ejer5: Genere los cuantiles en intervalos de 0.5
+
+quantile(setosa,probs = c(seq(0, 1, 0.5)))
+
+#Ejer6: ¿Qué sucede si el número de columnas deseado no se especifica? 
+
+ 
+aggregate(iris, list(Especies = iris$Species), mean)
+# Da como resultado  NA debido a que el argumento que contiene no es numerico ni logico,
+#es importante colocar las columnas para poder extraerlas. 
+
+##Obtenga la mediana, la moda y los cuantiles para cada especie de iris y para cada variable morfométrica.
+
+#VIRGINICA
+
+#Mediana de Virginica con cada variable morfométrica
+VirginicaLongP <- iris$Petal.Length[which(iris$Species=='virginica')]
+median(VirginicaLongP)
+VirginicaWithP <- iris$Petal.Width[which(iris$Species=="virginica")]
+median(VirginicaWithP)
+VirginicaLongS <-iris$Sepal.Length[which(iris$Species=="virginica")]
+median(VirginicaLongS)
+VirginicaWidthS<-iris$Sepal.Width[which(iris$Species=="virginica")]  
+median(VirginicaWidthS)
+
+#Moda de Virginica con cada varibale 
+moda(VirginicaLongP)
+moda(VirginicaWithP)
+moda(VirginicaLongS)
+moda(VirginicaWidthS)
+
+#Cuantiles de Virginica con cada variable morfométrica
+quantile(VirginicaLongP)
+quantile(VirginicaWithP)
+quantile(VirginicaLongS)
+quantile(VirginicaWidthS)
+
+#VERSICOLOR 
+Versicolorlongp <- iris$Petal.Length[which(iris$Species=='versicolor')]
+Versicolorwidthp<- iris$Petal.Width[which(iris$Species=="versicolor")]
+Versicolorlongs <-iris$Sepal.Length[which(iris$Species=="versicolor")]
+Versicolorwidths <-iris$Sepal.Width[which(iris$Species=="versicolor")]  
+
+#Mediana de Versicolor 
+mediana(Versicolorlongp)
+mediana(Versicolorwidthp)
+mediana(Versicolorlongs)
+mediana(Versicolorwidths)
+
+#Moda de versicolor
+moda(Versicolorlongp)
+moda(Versicolorwidthp)
+moda(Versicolorlongs)
+moda(Versicolorwidths)
+
+#Cuantil de versicolor 
+quantile(VersicolorPL)
+quantile(VersicolorPW)
+quantile(VersicolorSL)
+quantile(VersicolorSW)
+
+#SETOSA
+SetosalenP <- iris$Petal.Length[which(iris$Species=='setosa')]
+SetosaWP <- iris$Petal.Width[which(iris$Species=="setosa")]
+SetosalenS <-iris$Sepal.Length[which(iris$Species=="setosa")]
+SetosaWS<-iris$Sepal.Width[which(iris$Species=="setosa")]  
+
+#Mediana de setosa
+mediana(SetosalenP)
+mediana(SetosaWP)
+mediana(SetosalenS)
+mediana(SetosaWS)
+
+#Moda de setosa
+moda(SetosalenP)
+moda(SetosaWP)
+moda(SetosalenS)
+moda(SetosaWS)
+
+#Quantil de setosa
+quantile(SetosalenP)
+quantile(SetosaWP)
+quantile(SetosalenS)
+quantile(SetosaWS)
+
+#Lo visto previamente se resume usando la función "aggregate" 
+
+#Median
+aggregate(iris [,1:4], list(Especies = iris$Species), median)
+#MODA
+aggregate(iris [,1:4], list(Especies = iris$Species), moda)
+#CUANTILES
+aggregate(iris [,1:4], list(Especies = iris$Species), quantile)
+
+
+#Ejer: Grafique la distribución de frecuencias de cada población
+#usando histograma y densidad en el mismo gráfico. Adicione la media,
+#la mediana y la moda.
+
+# voy a campo y mido dos poblaciones de pájaros
+pop1 <-abs(rnorm(600,mean = 200,sd = 25))
+pop1
+range(pop1)
+
+min(pop1)
+max(pop1)
+
+pop2 <-abs(rnorm(600,mean = 120,sd = 25))
+range(pop2)
+
+pops<-cbind(pop1,pop2)
+pops
+
+
+  # distribución de frecuencias de pop1
+hist(pop1, # histogram
+     col = "green", # column color
+     border = "black",
+     
+     xlim = c(min(pop1),max(pop1)),
+     xlab = "Longitud de las colas ",
+     
+     main = "Longitud de las colas de la pop1")
+lines(density(pop1),
+      lwd = 1, # thickness of line
+      col = "purple") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar la media
+abline(v = mean(pop1),
+       col = "brown",
+       lwd = 1)
+
+abline(v = median(pop1),
+       col = "blue",
+       lwd = 1)
+abline(v= moda(pop1),
+       col="grey",
+       lwd= 1)
+
+legend(x = "topright", # location of legend within plot area
+       c("Density plot", "Mean", "Median", "Moda"),
+       col = c("purple", "brown", "blue", "grey"),
+       lwd = c(2, 2, 2,2))
+
+
+# distribución de frecuencias de pop2
+hist(pop2, # histogram
+     col = "chocolate3", # column color
+     border = "black",
+     xlim = c(120,270),
+     xlab = "Longitud de las colas",
+     main = "Longitud de las colas de la pop2")
+lines(density(pop2),
+      lwd = 2, # thickness of line
+      col = "pink") # Generar la distribución continua distribución de masa a partir de los datos observados
+
+# Graficar la media
+abline(v = mean(pop2),
+       col = "peachpuff",
+       lwd = 2)
+
+abline(v = median(pop2),
+       col = "orangered",
+       lwd = 2)
+abline(v= mi.moda(pop2), 
+       col="blueviolet",
+       lwd= 2)
+
+legend(x = "topright", # location of legend within plot area
+       c("Density plot", "Mean", "Median", "Moda"),
+       col = c("pink", "peachpuff", "orangered", "blueviolet"),
+       lwd = c(2, 2, 2))
+
+
+#Ejer: Lea el resumen y las gráficas del articulo de Magund 2007. Cargue los datos llamados 
+#'2007_EAA_Magud_et_al_data.csv' usando la función read.csv(). Estime todos los estadísticos vistos 
+#en esta práctica para las variables 'body length', 'tubercles 1b apart' y 'tarsus I length'. Grafique sus análisis y exportelos usando las funciones PNG o PDF. Escriba un párrafo de no más de 200 analizando lo que encontró. Tenga en cuenta que solo describir las salidas implica descripción de resultados no análisis.
+
+
+getwd()
+setwd("C:/Users/EQUIPO/Documents/ESTADISTICA/")
+Datos<-read.csv(file = "2007_EAA_Magud_et_al_data.csv", sep = ",", header = T)
+Datos
+x<-split(Datos, Datos$Traits)
+
+## Análisis de la longitud del cuerpo en las cuatro localidades.
+
+I_BK <- x$`I BK`$A
+II_IV<-x$`II IV`$A
+I_IV<-x$`I IV`$A
+II_Bk<-x$`II BK`$A
+
+library(psych)
+
+describe.by(I_BK)
+describe.by(I_IV)
+describe.by(II_Bk)
+describe.by(II_IV)
+
+
+A<- cbind(I_BK,II_Bk,I_IV,II_IV)
+boxplot(A, names=c("I Bk","II Bk", "I IV", "II IV"), frame = FALSE, col= c("paleturquoise3", "paleturquoise4",
+                                                                           "palevioletred","palevioletred1"), xlab="Lugares muestreados", ylab="Longitud", main ="Longitud del cuerpo de Aceria anthocoptes")
+
+## Análisis de la separacción de los tuberculos 1b
+I_BK2<- x$`I BK`$P
+
+II_IV2<-x$`II IV`$P
+I_IV2<-x$`I IV`$P
+II_Bk2<-x$`II BK`$P
+
+
+
+P<- cbind(I_BK2,II_Bk2,I_IV2,II_IV2)
+boxplot(P, names=c("I Bk","II Bk", "I IV", "II IV"), frame = FALSE, col= c("palevioletred3", "palevioletred4",
+                                                                           "papayawhip","peachpuff"), xlab="Lugares muestreados", ylab="Separación", ylim=c(8, 16),
+        main="Separación de los tubérculos de Aceria anthocoptes")
+describe.by(I_BK2)
+describe.by(I_IV2)
+describe.by(II_Bk2)
+describe.by(II_IV2)
+
+
+## Análisis de la longitud del tarso 
+
+I_BK3<- x$`I BK`$W
+II_IV3<-x$`II IV`$W
+I_IV3<-x$`I IV`$W
+II_Bk3<-x$`II BK`$W
+
+W<- cbind(I_BK3,II_Bk3,I_IV3,II_IV3)
+boxplot(W, names=c("I Bk","II Bk", "I IV", "II IV"), frame = FALSE, col= c("palegreen3", "palegreen4",
+                                                                           "paleturquoise","paleturquoise1"), xlab="Lugares muestreados", ylab="Longitud",
+        main="Longitud del tarso de Aceria anthocoptes")
+describe.by(I_BK3)
+describe.by(I_IV3)
+describe.by(II_Bk3)
+describe.by(II_IV3)
+
+#El análisis se envió al correo electónico
