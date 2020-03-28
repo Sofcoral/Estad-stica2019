@@ -1,0 +1,193 @@
+setwd("Clases/")
+V_copepodos<-read.csv(file = "V_copepodos.csv",header = T, sep = ",") 
+
+####
+#Análisis de normalidad de las abundancia de Mar abierto y Escorrentía 
+
+Normalidad<-by(V_copepodos$Abundancia,V_copepodos$Sector,shapiro.test)
+Normalidad #los datos no siguen una distribución normal
+
+library(car)
+
+leveneTest(V_copepodos$Abundancia ~ V_copepodos$Sector)
+#Las variables son homogéneas 
+
+#Los datos no siguen una distribución normal, por lo tanto, 
+#se recurre a usar log para comprimir los valores muy altos y
+#dispersar los bajos, teniendo en cuenta que los datos de abundancia
+#va desde miles a millones. 
+
+E <- log(V_copepodos$Abundancia[V_copepodos$Sector == "E"])
+M <- log(V_copepodos$Abundancia[V_copepodos$Sector == "M"])
+
+Log_Abundancia <- c(M,E)
+shapiro.test(E)
+shapiro.test(M)
+
+#El p-value en ambos casos es similar y mayor a 0.05, por lo que se 
+#concluye que los datos siguen una distribución normal. 
+
+#########
+
+#T.test para conocer si hay diferencias significativas en las medias. En 
+#este caso, como nuestra Ha es que en escorrentía hay menor abundancia de 
+#especies: 
+
+T.test <- t.test(x= E, y= M, alternative = "less")
+T.test
+
+#el p-value < 0.05, se rechaza la hipótesis nula y no se rechaza que en escorrentía
+#hay menos individuos que en mar abierto. 
+
+
+###Análisis de las variables físico-químicas
+
+
+#########
+#Clorofila
+
+#Test de normalidad
+
+Cloro_norm<-by(V_copepodos$Clorofila,V_copepodos$Sector,shapiro.test)
+Cloro_norm
+#la variable sigue una distribución normal p-value = 0.8296 p-value = 0.2662
+
+skewness(V_copepodos$Clorofila)
+kurtosis(V_copepodos$Clorofila)
+
+t.test(V_copepodos$Clorofila[V_copepodos$Sector == "M"], V_copepodos$Clorofila[V_copepodos$Sector == "E"])
+#Se rechaza la hipotetis nula   p-value = 0.01153 y no se rechaza que existen diferencias significativas entre sectores para esta variable.
+
+
+#correlación 
+
+cor.test(y = Log_Abundancia,x = V_copepodos$Clorofila, 
+         method = "pearson")#cor 0.8565763     p-value = 0.0003738
+
+
+
+#Gráfica de la relación de Clorofila y Abundancia 
+
+#Clorofila
+
+ggplot(V_copepodos) +
+  geom_violin(aes(Sector, Clorofila, fill=Sector, col = Sector),alpha=0.4,width=1) +
+  geom_boxplot(aes(Sector, Clorofila),outlier.colour = "red", outlier.shape = 16,width=0.1)+
+  geom_jitter(aes(Sector, Clorofila),alpha=0.4)+ 
+  scale_fill_brewer(palette = "Dark2")+
+  scale_color_brewer(palette = "Dark2")
+
+# clorofila con abundancia
+ggplot(V_copepodos,aes(x=Clorofila, y=log(Abundancia),color= Sector)) + 
+  geom_point() +
+  scale_color_brewer(palette = "Set2")
+
+
+
+
+#########
+#Salinidad
+
+#Test de normalidad
+Sal_norm<- by(V_copepodos$Salinidad,V_copepodos$Sector,shapiro.test)
+Sal_norm
+#la variable no sigue una distribución normal. p-value = 0.02244   p-value = 0.03371
+
+leveneTest(V_copepodosl$Salinidad ~ V_copepodosl$Sector)
+#la variable presenta homogeneidad de varianzas
+
+library("rcompanion")
+#transformamos los datos y realizamos t.test con la hipótesis
+#alternativa de que x>y. 
+
+SM <- transformTukey(V_copepodos$Salinidad[V_copepodos$Sector == "M"])
+SE <- transformTukey(V_copepodos$Salinidad[V_copepodos$Sector == "E"])
+
+t.test(SM,SE)
+Tukey_salinidad <- c(SM, SE)
+#p-value < 0.05, Se rechaza la hipótesis nula y no se rechaza que existen diferencias significativas entre sectores para esta variable.
+
+#correlación 
+
+cor.test(Tukey_salinidad, Log_Abundancia,method = "pearson")
+#cor 0.8717424 p-value = 0.0002195
+
+#Gráfica de la relación de Salinidad y Abundancia
+
+ggplot(V_copepodos,aes(x= log(Salinidad), y=log(Abundancia),color= Sector)) + 
+  geom_point() +
+  scale_color_brewer(palette = "Dark2")
+
+
+
+
+
+#########
+#Temperatura
+Temp_norm<-by(V_copepodos$Temperatura,V_copepodos$Sector,shapiro.test)
+Temp_norm
+#la variable sigue una distribución normal p-value = 0.2352     p-value = 0.6479
+
+skewness(V_copepodos$Temperatura)
+kurtosis(V_copepodos$Temperatura)
+
+
+t.test(V_copepodos$Temperatura[V_copepodos$Sector == "M"], V_copepodos$Temperatura[V_copepodos$Sector == "E"])
+#Se rechaza la hipótesis nula  p-value = 0.003509 y no se rechaza que existen diferencias significativas entre sectores para esta variable.
+
+#correlación 
+cor.test(y = Log_Abundancia,x = V_copepodos$Temperatura, 
+         method = "pearson")#cor -0.582497    p-value = 0.04687
+
+#Gráfica de la relación de Temperatura y Abundancia
+
+
+ggplot(V_copepodos,aes(x=log(Temperatura), y=log(Abundancia),color= Sector)) + 
+  geom_point() +
+  scale_color_brewer(palette = "Set2")
+
+#########
+#Oxigeno 
+Oxi_norm<-by(V_copepodos$Oxigeno,V_copepodos$Sector,shapiro.test)
+Oxi_norm
+#la variable sigue una distribución normal p-value = 0.3355    p-value = 0.337
+
+skewness(V_copepodos$Oxigeno)
+kurtosis(V_copepodos$Oxigeno)
+
+t.test(V_copepodos$Oxigeno[V_copepodos$Sector == "M"], V_copepodos$Oxigeno[V_copepodos$Sector == "E"])
+#Se rechaza la hipotetis nula p-value = 0.004393 no se rechaza que existen diferencias significativas entre sectores para esta variable.
+
+#correlación 
+cor.test(y = Log_Abundancia,x = V_copepodos$Oxigeno, 
+         method = "pearson")#cor  -0.6069672   p-value =  0.03636
+
+#Gráfica de la relación de Oxígeno y Abundancia
+
+ggplot(V_copepodos,aes(x= log(Oxigeno), y=log(Abundancia),color= Sector)) + 
+  geom_point() +
+  scale_color_brewer(palette = "Dark2")
+  
+
+
+
+#########
+#pH
+pH_norm<-by(V_copepodos$pH,V_copepodos$Sector,shapiro.test)
+pH_norm
+#la variable sigue una distribución normal p-value = 0.8046   p-value = 0.9582
+
+skewness(V_copepodos$pH)
+kurtosis(V_copepodos$pH)
+
+t.test(V_copepodos$pH[V_copepodos$Sector == "M"], V_copepodos$pH[V_copepodos$Sector == "E"])
+#No se rechaza la hipotetis nula p-value = 0.004393 y se rechaza la existencia de diferencias entre sectores para esta variable.
+
+cor.test(y = Log_Abundancia,x = V_copepodos$pH, 
+         method = "pearson")#cor -0.6938098  p-value = 0.01232
+
+#Gráfica de la relación de pH y Abundancia
+
+ggplot(V_copepodos,aes(x=log(pH), y=log(Abundancia),color= Sector)) + 
+  geom_point() +
+  scale_color_brewer(palette = "Set2")
