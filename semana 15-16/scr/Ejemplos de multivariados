@@ -1,0 +1,71 @@
+#Quiz semana 15-16
+
+
+
+#Matriz de correlación
+
+library(ggplot2)
+library(corrplot)
+
+#
+#Nos ayuda a observar la relación entre las variables y saber cuales se pueden seleccionar y cuales no
+
+vcopepodos<-read.csv("V_copepodos.csv",sep = ",")
+View(vcopepodos)
+
+#Las variables deben ser numéricas
+
+head(vcopepodos)
+vcopepodos$Sector = NULL
+vcopepodos.cor<-cor(vcopepodos,method = "pearson")
+vcopepodos.cor
+
+round(vcopepodos.cor,digits = 2)
+
+
+corrplot(vcopepodos.cor)
+corrplot(vcopepodos.cor,method="shade",shade.col = NA,tl.col = "black",tl.srt = 45,type = "upper",diag 
+         = F)
+
+#Correlación 
+
+#Un data frame con medidas de peso y longitud entre culebras
+
+peso<-c(3.5,3.7,3.8,3.3)
+Longitudm<-c(1.07,1.5,1.6,1.02)
+genero<-c("Lampropeltis","Micrurus", "Micrurus" ,"Lampropeltis")
+
+culebras<-cbind.data.frame(genero,peso,Longitudm)
+View(culebras)
+
+cor.test(culebras$peso,culebras$Longitudm)
+
+#podemos observar que hay una correlación del 0.95, es decir que si aumenta el peso, aumentará la longitud.  
+
+
+#Regresión lineal múltiple
+
+lm(vcopepodos)
+
+regresión<-lm(formula = Abundancia ~ Temperatura + Oxigeno + pH + Salinidad + Clorofila,    data = vcopepodos)
+summary(regresión)
+
+#Donde R squared es 0.7035, con un alto grado de predicción, capaz de explicar el 70% de la variabilidad observada en la abundancia
+
+#Análisis de componentes principales
+
+x <- read.csv("rep.csv")
+View(x)
+
+row.names(x) <- x[,1]
+peligro<- x[,-1]
+View(peligro)
+
+pca <- prcomp(peligro, scale = TRUE)
+
+
+pca$rotation
+head(pca$x)
+
+biplot(x = pca, scale = 0, cex = 0.6, col = c("blue4", "brown3")
+
